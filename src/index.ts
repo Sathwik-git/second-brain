@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-
+import User from "./db";
 
 const app = express();
 app.use(express.json());
@@ -9,8 +9,21 @@ app.get("/", (req, res) => {
   res.json({ msg: "Brainly" });
 });
 
-app.post("/api/v1/signup", async (req, res) => {
-  
+app.post("/api/v1/signup", async (req, res): Promise<void> => {
+  const { email, password } = req.body;
+  const isfound = await User.findOne({ email });
+
+  if (isfound) {
+    res.json({ msg: "User already existed" });
+    return;
+  }
+
+  await User.create({
+    email: email,
+    password: password,
+  });
+
+  res.json({ msg: "signup successful" });
 });
 
 app.post("/api/v1/signin", (req, res) => {});

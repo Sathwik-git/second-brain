@@ -8,6 +8,26 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
 });
 
-const User = mongoose.model("User", UserSchema);
+const contentTypes = ["image", "video", "article", "audio"];
 
-export default User;
+const contentSchema = new Schema({
+  link: { type: String, required: true },
+  title: { type: String, required: true },
+  type: { type: String, enum: contentTypes, required: true },
+  tags: { type: ObjectId, ref: "Tags" },
+  userID: { type: ObjectId, ref: "User", required: true },
+});
+
+const tagsShema = new Schema({
+  title: { type: String, required: true, unique: true },
+});
+
+const linkSchema = new Schema({
+  hash: { type: String, required: true },
+  userId: { type: ObjectId, ref: "User", required: true },
+});
+
+export const User = mongoose.model("User", UserSchema);
+export const Content = mongoose.model("Content", contentSchema);
+export const Tags = mongoose.model("Tags", tagsShema);
+export const Link = mongoose.model("Link", linkSchema);

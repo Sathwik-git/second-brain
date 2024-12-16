@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import User from "./db";
+import { User } from "./db";
 
 const app = express();
 app.use(express.json());
@@ -39,9 +39,7 @@ app.post("/api/v1/brain/share", (req, res) => {});
 app.get("/api/v1/brain/:shareLink", (req, res) => {});
 
 async function connectDB() {
-  await mongoose.connect(
-    "URL"
-  );
+  await mongoose.connect("URL");
   console.log("connected to database");
 }
 

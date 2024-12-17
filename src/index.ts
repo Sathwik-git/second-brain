@@ -10,11 +10,11 @@ app.get("/", (req, res) => {
   res.json({ msg: "Brainly" });
 });
 
-app.post("/api/v1/signup", async (req, res): Promise<void> => {
+app.post("/api/v1/signup", async (req, res) => {
   const { email, password } = req.body;
-  const isfound = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-  if (isfound) {
+  if (user) {
     res.json({ msg: "User already existed" });
     return;
   }
@@ -23,15 +23,39 @@ app.post("/api/v1/signup", async (req, res): Promise<void> => {
     email: email,
     password: hashedPassword,
   });
-
-  res.json({ msg: "signup successful" });
+  const token = jwt.sign(req.body, "SATHWIK");
+  res.json({ msg: "signup successful", token: token });
 });
 
-app.post("/api/v1/signin", (req, res) => {});
+app.post("/api/v1/signin", async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
 
-app.post("/api/v1/content", (req, res) => {});
+  if (!user) {
+    res.json({ msg: "User not found" });
+    return;
+  }
 
-app.get("/api/v1/content", (req, res) => {});
+  const hashedPassword = await bcrypt.compare(password, user.password);
+  if (!hashedPassword) {
+    res.json({ msg: "Enter valid credentials" });
+    return;
+  }
+
+  res.json({ msg: "successful signin" });
+});
+
+app.post("/api/v1/content", (req, res) => {
+  const { token } = req.body;
+  const user = jwt.verify(token, "SATHWIK");
+  res.json({ msg: user });
+});
+
+app.get("/api/v1/content", (req, res) => {
+  const token = req.body;
+  const user = jwt.verify(token, "SATHWIK");
+  res.json({ msg: user });
+});
 
 app.delete("/api/v1/content", (req, res) => {});
 

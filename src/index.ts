@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { User } from "./db";
 import { Request, Response } from "express";
+import { userMiddleware } from "./middleware";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -60,13 +61,11 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/v1/content", (req, res) => {
-  
-});
+app.post("/api/v1/content", userMiddleware, async (req, res) => {});
 
-app.get("/api/v1/content", (req, res) => {});
+app.get("/api/v1/content", userMiddleware, async (req, res) => {});
 
-app.delete("/api/v1/content", (req, res) => {});
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {});
 
 app.post("/api/v1/brain/share", (req, res) => {});
 

@@ -8,12 +8,19 @@ export const userMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const header = req.headers["authorization"];
-  const decode = jwt.verify(header as string, process.env.JWT_SECRET as string);
-  if (decode) {
-    req.body.userId = (decode as JwtPayload).id;
-    next();
-  }else{
-    res.json({msg:"Access Denied"})
+  try {
+    const header = req.headers["authorization"];
+    const decode = jwt.verify(
+      header as string,
+      process.env.JWT_SECRET as string
+    );
+    if (decode) {
+      req.body.userId = (decode as JwtPayload).id;
+      next();
+    } else {
+      res.json({ msg: "Access Denied" });
+    }
+  } catch (error) {
+    res.json("something went wrong");
   }
 };

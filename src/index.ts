@@ -23,8 +23,8 @@ app.post("/api/v1/signup", async (req, res) => {
     email: email,
     password: hashedPassword,
   });
-  const token = jwt.sign(req.body, "SATHWIK");
-  res.json({ msg: "signup successful", token: token });
+
+  res.json({ msg: "signup successful" });
 });
 
 app.post("/api/v1/signin", async (req, res) => {
@@ -42,20 +42,14 @@ app.post("/api/v1/signin", async (req, res) => {
     return;
   }
 
-  res.json({ msg: "successful signin" });
+  const token = jwt.sign(req.body, "SATHWIK");
+
+  res.json({ msg: "successful signin", token: token });
 });
 
-app.post("/api/v1/content", (req, res) => {
-  const { token } = req.body;
-  const user = jwt.verify(token, "SATHWIK");
-  res.json({ msg: user });
-});
+app.post("/api/v1/content", (req, res) => {});
 
-app.get("/api/v1/content", (req, res) => {
-  const token = req.body;
-  const user = jwt.verify(token, "SATHWIK");
-  res.json({ msg: user });
-});
+app.get("/api/v1/content", (req, res) => {});
 
 app.delete("/api/v1/content", (req, res) => {});
 
@@ -64,9 +58,7 @@ app.post("/api/v1/brain/share", (req, res) => {});
 app.get("/api/v1/brain/:shareLink", (req, res) => {});
 
 async function connectDB() {
-  await mongoose.connect(
-    "URL"
-  );
+  await mongoose.connect("URL");
   console.log("connected to database");
 }
 

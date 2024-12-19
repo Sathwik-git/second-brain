@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-export const userMiddleware = async (
+export const userMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -22,6 +22,6 @@ export const userMiddleware = async (
       res.json({ msg: "Access Denied" });
     }
   } catch (error) {
-    res.json("something went wrong" + error);
+    res.json("something went wrong");
   }
 };

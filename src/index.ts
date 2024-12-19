@@ -74,9 +74,24 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
   res.json({ msg: "content added successfully" });
 });
 
-app.get("/api/v1/content", userMiddleware, async (req, res) => {});
+app.get("/api/v1/content", userMiddleware, async (req, res) => {
+  const userID = req.body.userID;
+  const content = await Content.find({
+    userID: userID,
+  });
 
-app.delete("/api/v1/content", userMiddleware, async (req, res) => {});
+  res.json({ content });
+});
+
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {
+  const contentID = req.body.contentID;
+
+   await Content.deleteOne({
+    _id: contentID,
+  });
+
+  res.json("Deleted successfully");
+});
 
 app.post("/api/v1/brain/share", (req, res) => {});
 

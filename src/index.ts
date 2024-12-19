@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { User } from "./db";
+import { User, Content } from "./db";
 import { Request, Response } from "express";
 import { userMiddleware } from "./middleware";
 import * as dotenv from "dotenv";
@@ -61,7 +61,18 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/v1/content", userMiddleware, async (req, res) => {});
+app.post("/api/v1/content", userMiddleware, async (req, res) => {
+  const { link, title, type, tags, userID } = req.body;
+  await Content.create({
+    link,
+    title,
+    type,
+    tags,
+    userID,
+  });
+
+  res.json({ msg: "content added successfully" });
+});
 
 app.get("/api/v1/content", userMiddleware, async (req, res) => {});
 

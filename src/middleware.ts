@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-export const userMiddleware = (
+export const userMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -14,13 +14,14 @@ export const userMiddleware = (
       header as string,
       process.env.JWT_SECRET as string
     );
+
     if (decode) {
-      req.body.userId = (decode as JwtPayload).id;
+      req.body.userID = (decode as JwtPayload).id;
       next();
     } else {
       res.json({ msg: "Access Denied" });
     }
   } catch (error) {
-    res.json("something went wrong");
+    res.json("something went wrong" + error);
   }
 };
